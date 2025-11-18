@@ -1,0 +1,6 @@
+<!-- User Placeholder -->
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="100" fill="#e9ecef"/>
+    <circle cx="100" cy="80" r="35" fill="#6c757d"/>
+    <path d="M40 160 Q100 130 160 160" fill="#6c757d"/>
+</svg>

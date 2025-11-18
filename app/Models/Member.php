@@ -19,9 +19,10 @@ class Member extends Model {
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected static function booted() {
-        static::addGlobalScope('status', function (Builder $builder) {
-            return $builder->where('status', 1);
-        });
+        // Commented out to allow saving pending members
+        // static::addGlobalScope('status', function (Builder $builder) {
+        //     return $builder->where('status', 1);
+        // });
     }
 
     public function getCreatedAtAttribute($value) {

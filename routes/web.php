@@ -61,7 +61,147 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['install']], function () {
 
     Route::get('/', function () {
-        return view('landing');
+        return view('welcome');
+    });
+
+    Route::get('/members', function () {
+        return view('members');
+    });
+
+    Route::get('/docs', function () {
+        return view('docs');
+    });
+
+    Route::get('/projects', function () {
+        return view('projects');
+    });
+
+    Route::get('/executive', function () {
+        return view('executive');
+    });
+
+    Route::get('/registration', function () {
+        return view('registration');
+    });
+
+    Route::post('/registration', function () {
+        $request = request();
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50', 
+            'first_name_bn' => 'required|string|max:100',
+            'last_name_bn' => 'required|string|max:100',
+            'father_name' => 'required|string|max:100',
+            'mother_name' => 'required|string|max:100',
+            'nid_number' => 'required|string|max:20',
+            'birth_date' => 'required|date',
+            'gender' => 'required|in:male,female',
+            'religion' => 'required|string|max:50',
+            'marital_status' => 'required|in:single,married,divorced,widowed',
+            'profession' => 'required|string|max:100',
+            'education' => 'required|string|max:100',
+            'monthly_income' => 'required|numeric|min:0',
+            'email' => 'nullable|email|max:100',
+            'mobile' => 'required|string|max:50',
+            'permanent_address' => 'required|string|max:1000',
+            'present_address' => 'nullable|string|max:1000',
+            'nominee_name' => 'required|string|max:100',
+            'nominee_relation' => 'required|string|max:50',
+            'nominee_nid' => 'required|string|max:20',
+            'nominee_address' => 'required|string|max:1000',
+            'shares_count' => 'required|integer|min:2|max:100',
+            'reference_member_code' => 'nullable|string|max:50',
+            'photo' => 'nullable|image|max:2048',
+            'nid_image' => 'nullable|image|max:2048',
+            'agree_rules' => 'required|accepted',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('registration')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Handle file uploads
+        $photo = 'default.png';
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $photo = time() . '_photo_' . $file->getClientOriginalName();
+            $file->move(public_path() . "/uploads/profile/", $photo);
+        }
+
+        $nid_image = null;
+        if ($request->hasFile('nid_image')) {
+            $file = $request->file('nid_image');
+            $nid_image = time() . '_nid_' . $file->getClientOriginalName();
+            $file->move(public_path() . "/uploads/media/", $nid_image);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Generate member number
+            $memberCount = DB::table('members')->count();
+            $memberNo = 'CPSS-' . str_pad(($memberCount + 1), 5, '0', STR_PAD_LEFT);
+            
+            // Create member using actual database columns
+            $member = new Member();
+            
+            // Basic information
+            $member->first_name = $request->input('first_name');
+            $member->last_name = $request->input('last_name');
+            $member->first_name_bn = $request->input('first_name_bn');
+            $member->last_name_bn = $request->input('last_name_bn');
+            $member->father_name = $request->input('father_name');
+            $member->mother_name = $request->input('mother_name');
+            
+            // Personal details
+            $member->nid_number = $request->input('nid_number');
+            $member->birth_date = $request->input('birth_date');
+            $member->gender = $request->input('gender');
+            $member->religion = $request->input('religion');
+            $member->marital_status = $request->input('marital_status');
+            $member->profession = $request->input('profession');
+            $member->education = $request->input('education');
+            $member->monthly_income = $request->input('monthly_income');
+            
+            // Contact information
+            $member->mobile = $request->input('mobile');
+            $member->email = $request->input('email');
+            $member->address = $request->input('present_address') ?? $request->input('permanent_address');
+            $member->p_address = $request->input('permanent_address'); // Using p_address for permanent address
+            
+            // Member specific
+            $member->member_no = $memberNo;
+            $member->photo = $photo;
+            $member->nid = $nid_image; // Using nid field for NID image
+            $member->status = 0; // Pending approval
+            
+            // Store nominee and cooperative specific info in custom_fields (only for fields not in main table)
+            $customFields = [
+                'nominee_name' => $request->input('nominee_name'),
+                'nominee_relation' => $request->input('nominee_relation'),
+                'nominee_nid' => $request->input('nominee_nid'),
+                'nominee_address' => $request->input('nominee_address'),
+                'shares_count' => $request->input('shares_count'),
+                'reference_member_code' => $request->input('reference_member_code'),
+            ];
+            
+            $member->custom_fields = json_encode($customFields);
+            $member->save();
+
+            DB::commit();
+            
+            return redirect('registration')
+                ->with('success', 'আপনার আবেদন সফলভাবে জমা দেওয়া হয়েছে। সদস্য নম্বর: ' . $memberNo . '. আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।')
+                ->withInput([]);
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect('registration')
+                ->with('error', 'একটি ত্রুটি ঘটেছে। দয়া করে আবার চেষ্টা করুন। Error: ' . $e->getMessage())
+                ->withInput();
+        }
     });
 
     Route::post('open-account', function () {
