@@ -64,7 +64,7 @@
                                 use App\Models\Member;
                                 $rownum = 1;
                                 // Get actual members from database (remove status filter to show all members)
-                                $members = Member::withoutGlobalScope('status')->get();
+                                $members = Member::withoutGlobalScopes()->get();
                                 
                                 // If no members exist, show sample data
                                 if($members->isEmpty()) {

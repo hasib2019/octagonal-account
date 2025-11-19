@@ -39,12 +39,9 @@ use App\Http\Controllers\UtilityController;
 use App\Http\Controllers\WithdrawMethodController;
 use App\Http\Controllers\WithdrawRequestController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use App\Models\Member;
-use App\Models\SavingsProduct;
-use App\Models\SavingsAccount;
-use App\Models\Transaction;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\CommitteeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,14 +57,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['install']], function () {
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('/', [FrontendController::class, 'landing'])->name('landing');
 
     Route::get('/members', function () {
         return view('members');
     });
-
+ 
     Route::get('/docs', function () {
         return view('docs');
     });
@@ -77,228 +72,14 @@ Route::group(['middleware' => ['install']], function () {
     });
 
     Route::get('/executive', function () {
-        return view('executive');
+        return app(\App\Http\Controllers\FrontendController::class)->executive();
     });
 
-    Route::get('/registration', function () {
-        return view('registration');
-    });
+    Route::get('/registration', [FrontendController::class, 'showRegistration'])->name('registration.show');
 
-    Route::post('/registration', function () {
-        $request = request();
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50', 
-            'first_name_bn' => 'required|string|max:100',
-            'last_name_bn' => 'required|string|max:100',
-            'father_name' => 'required|string|max:100',
-            'mother_name' => 'required|string|max:100',
-            'nid_number' => 'required|string|max:20',
-            'birth_date' => 'required|date',
-            'gender' => 'required|in:male,female',
-            'religion' => 'required|string|max:50',
-            'marital_status' => 'required|in:single,married,divorced,widowed',
-            'profession' => 'required|string|max:100',
-            'education' => 'required|string|max:100',
-            'monthly_income' => 'required|numeric|min:0',
-            'email' => 'nullable|email|max:100',
-            'mobile' => 'required|string|max:50',
-            'permanent_address' => 'required|string|max:1000',
-            'present_address' => 'nullable|string|max:1000',
-            'nominee_name' => 'required|string|max:100',
-            'nominee_relation' => 'required|string|max:50',
-            'nominee_nid' => 'required|string|max:20',
-            'nominee_address' => 'required|string|max:1000',
-            'shares_count' => 'required|integer|min:2|max:100',
-            'reference_member_code' => 'nullable|string|max:50',
-            'photo' => 'nullable|image|max:2048',
-            'nid_image' => 'nullable|image|max:2048',
-            'agree_rules' => 'required|accepted',
-        ]);
+    Route::post('/registration', [FrontendController::class, 'submitRegistration'])->name('registration.submit');
 
-        if ($validator->fails()) {
-            return redirect('registration')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        // Handle file uploads
-        $photo = 'default.png';
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $photo = time() . '_photo_' . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/profile/", $photo);
-        }
-
-        $nid_image = null;
-        if ($request->hasFile('nid_image')) {
-            $file = $request->file('nid_image');
-            $nid_image = time() . '_nid_' . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/media/", $nid_image);
-        }
-
-        DB::beginTransaction();
-
-        try {
-            // Generate member number
-            $memberCount = DB::table('members')->count();
-            $memberNo = 'CPSS-' . str_pad(($memberCount + 1), 5, '0', STR_PAD_LEFT);
-            
-            // Create member using actual database columns
-            $member = new Member();
-            
-            // Basic information
-            $member->first_name = $request->input('first_name');
-            $member->last_name = $request->input('last_name');
-            $member->first_name_bn = $request->input('first_name_bn');
-            $member->last_name_bn = $request->input('last_name_bn');
-            $member->father_name = $request->input('father_name');
-            $member->mother_name = $request->input('mother_name');
-            
-            // Personal details
-            $member->nid_number = $request->input('nid_number');
-            $member->birth_date = $request->input('birth_date');
-            $member->gender = $request->input('gender');
-            $member->religion = $request->input('religion');
-            $member->marital_status = $request->input('marital_status');
-            $member->profession = $request->input('profession');
-            $member->education = $request->input('education');
-            $member->monthly_income = $request->input('monthly_income');
-            
-            // Contact information
-            $member->mobile = $request->input('mobile');
-            $member->email = $request->input('email');
-            $member->address = $request->input('present_address') ?? $request->input('permanent_address');
-            $member->p_address = $request->input('permanent_address'); // Using p_address for permanent address
-            
-            // Member specific
-            $member->member_no = $memberNo;
-            $member->photo = $photo;
-            $member->nid = $nid_image; // Using nid field for NID image
-            $member->status = 0; // Pending approval
-            
-            // Store nominee and cooperative specific info in custom_fields (only for fields not in main table)
-            $customFields = [
-                'nominee_name' => $request->input('nominee_name'),
-                'nominee_relation' => $request->input('nominee_relation'),
-                'nominee_nid' => $request->input('nominee_nid'),
-                'nominee_address' => $request->input('nominee_address'),
-                'shares_count' => $request->input('shares_count'),
-                'reference_member_code' => $request->input('reference_member_code'),
-            ];
-            
-            $member->custom_fields = json_encode($customFields);
-            $member->save();
-
-            DB::commit();
-            
-            return redirect('registration')
-                ->with('success', 'আপনার আবেদন সফলভাবে জমা দেওয়া হয়েছে। সদস্য নম্বর: ' . $memberNo . '. আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।')
-                ->withInput([]);
-                
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect('registration')
-                ->with('error', 'একটি ত্রুটি ঘটেছে। দয়া করে আবার চেষ্টা করুন। Error: ' . $e->getMessage())
-                ->withInput();
-        }
-    });
-
-    Route::post('open-account', function () {
-        $request = request();
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'nullable|email|unique:members|max:191',
-            'country_code' => 'required_with:mobile',
-            'photo' => 'nullable|image',
-            'permanent_address' => 'nullable|string',
-            'nid_image' => 'nullable|image',
-            'account_number' => 'nullable|unique:savings_accounts|max:50',
-            'savings_product_id' => 'nullable|exists:savings_products,id',
-            'opening_balance' => 'nullable|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect(url('/#create-account'))
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $photo = 'default.png';
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $photo = time() . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/profile/", $photo);
-        }
-
-        $nid_image = null;
-        if ($request->hasFile('nid_image')) {
-            $file = $request->file('nid_image');
-            $nid_image = time() . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/media/", $nid_image);
-        }
-
-        DB::beginTransaction();
-
-        $member = new Member();
-        $member->first_name = $request->input('first_name');
-        $member->last_name = $request->input('last_name');
-        $member->branch_id = $request->input('branch_id');
-        $member->email = $request->input('email');
-        $member->country_code = $request->input('country_code');
-        $member->mobile = $request->input('mobile');
-        $member->business_name = $request->input('business_name');
-        $member->member_no = 'M' . now()->format('YmdHis');
-        $member->gender = $request->input('gender');
-        $member->city = $request->input('city');
-        $member->state = $request->input('state');
-        $member->zip = $request->input('zip');
-        $member->address = $request->input('address');
-        $member->permanent_address = $request->input('permanent_address');
-        $member->credit_source = $request->input('credit_source');
-        $member->photo = $photo;
-        $member->nid_image = $nid_image;
-        $member->status = 0;
-        $member->save();
-
-        if ($request->filled('account_number') && $request->filled('savings_product_id') && $request->filled('opening_balance')) {
-            $accountType = SavingsProduct::find($request->savings_product_id);
-            if ($request->opening_balance < $accountType->minimum_deposit_amount) {
-                DB::rollBack();
-                return redirect(url('/#create-account'))
-                    ->with('error', _lang('You must deposit minimum') . ' ' . $accountType->minimum_deposit_amount . ' ' . $accountType->currency->name)
-                    ->withInput();
-            }
-
-            $savingsaccount = new SavingsAccount();
-            $savingsaccount->account_number = $request->input('account_number');
-            $savingsaccount->member_id = $member->id;
-            $savingsaccount->savings_product_id = $request->input('savings_product_id');
-            $savingsaccount->status = 1;
-            $savingsaccount->opening_balance = $request->input('opening_balance');
-            $savingsaccount->description = $request->input('description');
-            $savingsaccount->save();
-
-            $transaction = new Transaction();
-            $transaction->trans_date = now();
-            $transaction->member_id = $member->id;
-            $transaction->savings_account_id = $savingsaccount->id;
-            $transaction->amount = $request->input('opening_balance');
-            $transaction->dr_cr = 'cr';
-            $transaction->type = 'Deposit';
-            $transaction->method = 'Manual';
-            $transaction->status = 2;
-            $transaction->description = _lang('Initial Deposit');
-            $transaction->save();
-        }
-
-        DB::commit();
-
-        return redirect(url('/#create-account'))
-            ->with('success', _lang('Your request has been submitted. We will contact you soon.'))
-            ->withInput([]);
-    });
+    Route::post('open-account', [FrontendController::class, 'openAccount'])->name('open-account');
 
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
@@ -592,3 +373,6 @@ Route::post('install/finish', 'Install\InstallController@final_touch');
 
 //Update System
 Route::get('migration/update', 'Install\UpdateController@update_migration');
+            // Executive Committee Management
+            Route::resource('designations', DesignationController::class)->middleware("demo:PUT|PATCH|DELETE");
+            Route::resource('committees', CommitteeController::class)->only(['index','create','store','destroy'])->middleware("demo:PUT|PATCH|DELETE");

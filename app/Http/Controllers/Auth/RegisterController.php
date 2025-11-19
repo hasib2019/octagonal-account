@@ -7,7 +7,6 @@ use App\Models\Member;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +25,7 @@ class RegisterController extends Controller {
     |
      */
 
-    use RegistersUsers;
+    
 
     /**
      * Where to redirect users after registration.
@@ -145,5 +144,10 @@ class RegisterController extends Controller {
         return $request->wantsJson()
         ? new JsonResponse([], 201)
         : redirect()->route('register')->with('success', _lang('Registration completed successfully. You will be notified once approved by the authority.'));
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        return null;
     }
 }

@@ -50,132 +50,23 @@
                         </h5>
                     </div>
                     
-                    @php
-                    $committees = [
-                        [
-                            'title' => 'সভাপতিমণ্ডলী (President)',
-                            'members' => [
-                                [
-                                    'name' => 'মোঃ আবদুর রহিম',
-                                    'name_en' => 'MD. ABDUR RAHIM',
-                                    'position' => 'সভাপতি',
-                                    'position_en' => 'President',
-                                    'phone' => '01712345678',
-                                    'email' => 'president@codergroup.org',
-                                    'image' => 'president.jpg',
-                                    'facebook' => '#',
-                                    'linkedin' => '#'
-                                ]
-                            ]
-                        ],
-                        [
-                            'title' => 'সহ-সভাপতিমণ্ডলী (Vice Presidents)',
-                            'members' => [
-                                [
-                                    'name' => 'মোসাম্মৎ ফাতেমা খাতুন',
-                                    'name_en' => 'MOSAMAT FATEMA KHATUN',
-                                    'position' => 'সহ-সভাপতি',
-                                    'position_en' => 'Vice President',
-                                    'phone' => '01823456789',
-                                    'email' => 'vp1@codergroup.org',
-                                    'image' => 'vp1.jpg',
-                                    'facebook' => '#'
-                                ],
-                                [
-                                    'name' => 'মোঃ নজরুল ইসলাম',
-                                    'name_en' => 'MD. NAZRUL ISLAM',
-                                    'position' => 'সহ-সভাপতি',
-                                    'position_en' => 'Vice President',
-                                    'phone' => '01934567890',
-                                    'email' => 'vp2@codergroup.org',
-                                    'image' => 'vp2.jpg',
-                                    'facebook' => '#'
-                                ]
-                            ]
-                        ],
-                        [
-                            'title' => 'সাধারণ সম্পাদক (General Secretary)',
-                            'members' => [
-                                [
-                                    'name' => 'মোঃ সাইফুর রহমান',
-                                    'name_en' => 'MD. SAIFUR RAHMAN',
-                                    'position' => 'সাধারণ সম্পাদক',
-                                    'position_en' => 'General Secretary',
-                                    'phone' => '01645678901',
-                                    'email' => 'secretary@codergroup.org',
-                                    'image' => 'secretary.jpg',
-                                    'facebook' => '#',
-                                    'linkedin' => '#',
-                                    'twitter' => '#'
-                                ]
-                            ]
-                        ],
-                        [
-                            'title' => 'কোষাধ্যক্ষ (Treasurer)',
-                            'members' => [
-                                [
-                                    'name' => 'মোঃ আলী হোসেন',
-                                    'name_en' => 'MD. ALI HOSSAIN',
-                                    'position' => 'কোষাধ্যক্ষ',
-                                    'position_en' => 'Treasurer',
-                                    'phone' => '01756789012',
-                                    'email' => 'treasurer@codergroup.org',
-                                    'image' => 'treasurer.jpg',
-                                    'facebook' => '#'
-                                ]
-                            ]
-                        ],
-                        [
-                            'title' => 'নির্বাহী সদস্যবৃন্দ (Executive Members)',
-                            'members' => [
-                                [
-                                    'name' => 'মোঃ রহিম উদ্দিন',
-                                    'name_en' => 'MD. RAHIM UDDIN',
-                                    'position' => 'নির্বাহী সদস্য',
-                                    'position_en' => 'Executive Member',
-                                    'phone' => '01867890123',
-                                    'email' => 'member1@codergroup.org',
-                                    'image' => 'member1.jpg'
-                                ],
-                                [
-                                    'name' => 'মোসাম্মৎ রোকেয়া বেগম',
-                                    'name_en' => 'MOSAMAT ROKEYA BEGUM',
-                                    'position' => 'নির্বাহী সদস্য',
-                                    'position_en' => 'Executive Member',
-                                    'phone' => '01978901234',
-                                    'email' => 'member2@codergroup.org',
-                                    'image' => 'member2.jpg'
-                                ],
-                                [
-                                    'name' => 'মোঃ করিম উল্লাহ',
-                                    'name_en' => 'MD. KARIM ULLAH',
-                                    'position' => 'নির্বাহী সদস্য',
-                                    'position_en' => 'Executive Member',
-                                    'phone' => '01589012345',
-                                    'email' => 'member3@codergroup.org',
-                                    'image' => 'member3.jpg'
-                                ]
-                            ]
-                        ]
-                    ];
-                    @endphp
-
-                    @foreach($committees as $committee)
+                    @foreach($designations as $designation)
                     <div class="row justify-content-center mb-5">
                         <div class="col-12">
-                            <h4 class="text-center mb-4 fw-bold" style="color: #045D5D;">{{ $committee['title'] }}</h4>
+                            <h4 class="text-center mb-4 fw-bold" style="color: #045D5D;">{{ $designation->name }}@if($designation->used_option) ({{ $designation->used_option }}) @endif</h4>
                             
                             <div class="row g-4 justify-content-center">
-                                @foreach($committee['members'] as $member)
+                                @foreach($designation->committees as $cm)
+                                @php $member = $cm->member; @endphp
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card border-0 shadow-lg h-100">
                                         <div class="card-body text-center p-4">
                                             <div class="position-relative mb-4">
                                                 <div class="member-avatar mx-auto" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid #045D5D; background: linear-gradient(135deg, #045D5D, #067676);">
-                                                    <img src="{{ asset('assets/img/team/' . $member['image']) }}" 
+                                                    <img src="{{ isset($member->photo) ? asset('uploads/profile/'.$member->photo) : asset('assets/img/team/default.jpg') }}" 
                                                          class="w-100 h-100" 
                                                          style="object-fit: cover;" 
-                                                         alt="{{ $member['name'] }}"
+                                                         alt="{{ $member->first_name }} {{ $member->last_name }}"
                                                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                                     <div class="d-none align-items-center justify-content-center w-100 h-100 text-white">
                                                         <i class="fas fa-user fa-3x"></i>
@@ -183,34 +74,34 @@
                                                 </div>
                                             </div>
                                             
-                                            <h5 class="fw-bold text-dark mb-1">{{ $member['name'] }}</h5>
-                                            <p class="text-muted small mb-2">{{ $member['name_en'] }}</p>
-                                            <h6 class="text-primary mb-3">{{ $member['position'] }}</h6>
+                                            <h5 class="fw-bold text-dark mb-1">{{ $member->first_name }} {{ $member->last_name }}</h5>
+                                            <p class="text-muted small mb-2">{{ $member->first_name_bn }} {{ $member->last_name_bn }}</p>
+                                            <h6 class="text-primary mb-3">{{ $designation->name }}</h6>
                                             
                                             <div class="contact-info mb-3">
                                                 <p class="mb-1 small">
                                                     <i class="fas fa-phone text-success me-2"></i>
-                                                    <a href="tel:{{ $member['phone'] }}" class="text-decoration-none">{{ $member['phone'] }}</a>
+                                                    <a href="tel:{{ $member->mobile }}" class="text-decoration-none">{{ $member->mobile }}</a>
                                                 </p>
                                                 <p class="mb-0 small">
                                                     <i class="fas fa-envelope text-primary me-2"></i>
-                                                    <a href="mailto:{{ $member['email'] }}" class="text-decoration-none">{{ $member['email'] }}</a>
+                                                    <a href="mailto:{{ $member->email }}" class="text-decoration-none">{{ $member->email }}</a>
                                                 </p>
                                             </div>
                                             
                                             <div class="social-links">
-                                                @if(isset($member['facebook']))
-                                                <a href="{{ $member['facebook'] }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                @if(isset($member->facebook))
+                                                <a href="{{ $member->facebook }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
                                                     <i class="fab fa-facebook-f"></i>
                                                 </a>
                                                 @endif
-                                                @if(isset($member['linkedin']))
-                                                <a href="{{ $member['linkedin'] }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                @if(isset($member->linkedin))
+                                                <a href="{{ $member->linkedin }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
                                                     <i class="fab fa-linkedin-in"></i>
                                                 </a>
                                                 @endif
-                                                @if(isset($member['twitter']))
-                                                <a href="{{ $member['twitter'] }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                @if(isset($member->twitter))
+                                                <a href="{{ $member->twitter }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
                                                     <i class="fab fa-twitter"></i>
                                                 </a>
                                                 @endif

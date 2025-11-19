@@ -87,8 +87,8 @@
                             <section class="mb-4">
                                 <h6>নাম ও ঠিকানা ( Name & Address )</h6>
                                 <ul>
-                                    <li>সমিতির নাম: "কোডার পেশাজীবী সমবায় সমিতি লিঃ" (Coder Peshajibi Samabay Samity Ltd.)</li>
-                                    <li>সমিতির প্রধান কার্যালয়ের ঠিকানা: ১০/এ-৩, (৮ম তলা) বর্ধন বাড়ি, দারুস সালাম থানা, মিরপুর, ঢাকা-১২১৬</li>
+                                    <li>সমিতির নাম: "অক্টাগোনাল পেশাজীবী সমবায় সমিতি লিঃ" (Octagonal Peshajibi Samabay Samity Ltd.)</li>
+                                    <li>সমিতির প্রধান কার্যালয়ের ঠিকানা: address, দারুস সালাম থানা, মিরপুর, ঢাকা-১২১৬</li>
                                     <li>সমিতির ঠিকানা পরিবর্তন করা যাবে নির্বাহী কমিটির অনুমোদন সাপেক্ষে।</li>
                                 </ul>
                             </section>
@@ -99,21 +99,21 @@
                                     <li>যে কোনো প্রাপ্তবয়স্ক (১৮ বছর বা তার বেশি) ব্যক্তি যিনি বাংলাদেশের নাগরিক, তিনি সদস্য হতে পারবেন।</li>
                                     <li>সদস্যপদ গ্রহণের জন্য এন্ট্রি ফি ৳ ১৫০০/= (মাত্র এক হাজার পাঁচশত) টাকা দিতে হবে (অফেরতযোগ্য)।</li>
                                     <li>সদস্য হতে হলে কমপক্ষে ২(দুই) টি শেয়ার ক্রয় করতে হবে।</li>
-                                    <li>প্রতি শেয়ারের দাম: <strong>৳ ৫,০০০/- (মাত্র পাঁচ হাজার) টাকা</strong> (এককালীন)।</li>
+                                    <li>প্রতি শেয়ারের দাম: <strong>৳ ২,৫০০/- (মাত্র পঁচিশ শত) টাকা</strong> (এককালীন)।</li>
                                 </ul>
                             </section>
 
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <div class="sig">
-                                        <div>মোঃ সাইফুর রহমান (Md. Saifur Rahman)</div>
+                                        <div>তৌফিকুল ইসলাম (Tawfiqul Islam)</div>
                                         <div>_______________________________________</div>
                                         <div>সভাপতি (President)</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="sig">
-                                        <div>সিরাজুল ইসলাম (Shirajul Islam)</div>
+                                        <div>মোঃ হাসিবুজ্জামান (Md. Hasibuzzaman)</div>
                                         <div>_______________________________________</div>
                                         <div>সম্পাদক (Secretary)</div>
                                     </div>
@@ -165,7 +165,7 @@
                                 
                                 <!-- Personal Information -->
                                 <div class="form-section">
-                                    <h5><i class="fas fa-user me-2"></i>ব্যক্তিগত তথ্য (Personal Information)</h5>
+                            <h5><i class="fas fa-user me-2"></i>ব্যক্তিগত তথ্য (Personal Information)</h5>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
@@ -276,12 +276,6 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">ইমেইল ঠিকানা</label>
-                                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
                                                 <label class="form-label required-field">স্থায়ী ঠিকানা</label>
                                                 <textarea class="form-control" name="permanent_address" rows="3" required>{{ old('permanent_address') }}</textarea>
                                             </div>
@@ -343,6 +337,41 @@
                                                 <label class="form-label">রেফারেন্স সদস্য কোড (যদি থাকে)</label>
                                                 <input type="text" class="form-control" name="reference_member_code" value="{{ old('reference_member_code') }}">
                                                 <small class="text-muted">রেফারেন্স দিলে ১০০ টাকা ভাতা পাবেন</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Account Section -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-user-lock me-2"></i>অ্যাকাউন্ট সেকশন (Account Section)</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">ইমেইল ঠিকানা</label>
+                                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">পাসওয়ার্ড (Password)</label>
+                                                <input type="password" class="form-control" name="password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Account Details -->
+                                <div class="form-section">
+                                    <h5><i class="fas fa-credit-card me-2"></i>অ্যাকাউন্ট বিবরণ (Account Details)</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">অ্যাকাউন্ট টাইপ</label>
+                                                <select class="form-select" name="savings_product_id">
+                                                    <option value="">নির্বাচন করুন</option>
+                                                    {{ create_option('savings_products', 'id', 'name') }}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
