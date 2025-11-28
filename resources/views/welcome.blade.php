@@ -41,8 +41,8 @@
     <!-- Navbar End -->
 
     <!-- Hero Start -->
-    <div class="container-fluid pb-3 hero-header bg-light mb-3">
-        <div class="container py-3">
+    <div class="container-fluid hero-header bg-light mb-3">
+        <div class="container py-4 py-md-5">
             <x-hero-slider />
         </div>
     </div>
@@ -72,13 +72,17 @@
 
     <!-- Service Start -->
     <div class="container-fluid py-5">
-        <x-services-section />
+        <div class="container">
+            <x-services-section />
+        </div>
     </div>
     <!-- Service End -->
 
     <!-- Team Start -->
     <div class="container-fluid bg-light py-5">
-        <x-team-section />
+        <div class="container">
+            <x-team-section />
+        </div>
     </div>
     <!-- Team End -->
 

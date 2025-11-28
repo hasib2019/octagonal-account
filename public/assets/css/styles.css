@@ -201,6 +201,48 @@
     background: linear-gradient(to bottom, #fff8e7 0%, #ffffff 100%);
 }
 
+/* Responsive improvements for landing */
+.hero-header {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+.hero-header img, .hero-header .carousel img, .hero-header .owl-carousel .item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.sticky-top { z-index: 1020; }
+
+/* Prevent header overlap over content */
+.container-fluid.sticky-top { z-index: 1040; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.container-fluid.sticky-top .navbar { min-height: 56px; }
+.sticky-top + .hero-header { margin-top: 0.5rem; }
+@media (max-width: 992px) {
+  .sticky-top + .hero-header { margin-top: 56px; }
+}
+
+/* Ensure hero/slider never overlaps header */
+.hero-header { position: relative; z-index: 1; }
+.hero-header .owl-carousel, .hero-header .carousel { position: relative; z-index: 1; }
+
+@media (max-width: 576px) {
+    .glass-card { padding: 14px; }
+    .glass-card-header { padding: 10px; }
+    .hero-header { padding-top: 1rem; padding-bottom: 1rem; }
+    .navbar .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .back-to-top { bottom: 16px; right: 16px; }
+}
+
+.navbar-brand { max-width: 55%; white-space: normal; }
+.navbar-nav .nav-link { padding: .5rem .6rem; font-size: .95rem; }
+@media (max-width: 1200px) {
+  .navbar-brand { max-width: 50%; }
+  .navbar-nav .nav-link { font-size: .9rem; }
+}
+@media (max-width: 992px) {
+  .navbar-brand { max-width: 65%; }
+}
+
 .certificate-logo {
     width: 100px;
     height: 100px;
@@ -366,5 +408,3 @@
         display: none;
     }
 }
-
-

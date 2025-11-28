@@ -242,6 +242,11 @@
                                                     <option value="widowed" {{ old('marital_status') == 'widowed' ? 'selected' : '' }}>বিধবা/বিপত্নীক</option>
                                                 </select>
                                             </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">স্বামী/স্ত্রীর নাম (Spouse Name)</label>
+                                                <input type="text" class="form-control" name="spouse_name" value="{{ old('spouse_name') }}">
+                                                <small class="text-muted">বিবাহিত হলে এই তথ্য দিন</small>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
@@ -329,7 +334,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required-field">শেয়ার সংখ্যা (কমপক্ষে ২টি)</label>
                                                 <input type="number" class="form-control" name="shares_count" value="{{ old('shares_count', 2) }}" min="2" required>
-                                                <small class="text-muted">প্রতি শেয়ারের মূল্য: ৫,০০০ টাকা</small>
+                                                <small class="text-muted">প্রতি শেয়ারের মূল্য: ২,৫০০ টাকা</small>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -395,6 +400,20 @@
                                                 <small class="text-muted">সর্বোচ্চ ফাইল সাইজ: 2MB</small>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">সদস্যের স্বাক্ষর (Member Signature)</label>
+                                                <input type="file" class="form-control" name="signature_image" accept="image/*">
+                                                <small class="text-muted">সর্বোচ্চ ফাইল সাইজ: 2MB</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">ঠিকানা সনদপত্র (Address Certificate)</label>
+                                                <input type="file" class="form-control" name="address_certificate_image" accept="image/*">
+                                                <small class="text-muted">সর্বোচ্চ ফাইল সাইজ: 2MB</small>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -432,7 +451,28 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                Swal.fire({
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+            @if(session('error'))
+                Swal.fire({
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
+</body>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const agreeRules = document.getElementById('agreeRules');

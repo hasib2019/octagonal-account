@@ -60,10 +60,14 @@ class FrontendController extends Controller
         }
 
         $nid_image = null;
+        $profilDir = public_path() . "/uploads/profile/";
+        if (!is_dir($profilDir)) {
+            @mkdir($profilDir, 0775, true);
+        }
         if ($request->hasFile('nid_image')) {
             $file = $request->file('nid_image');
             $nid_image = time() . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/media/", $nid_image);
+            $file->move($profilDir, $nid_image);
         }
 
         DB::beginTransaction();
@@ -125,6 +129,7 @@ class FrontendController extends Controller
             'gender' => 'required|in:male,female',
             'religion' => 'required',
             'marital_status' => 'required|in:single,married,divorced,widowed',
+            'spouse_name' => 'nullable|required_if:marital_status,married|string|max:100',
             'profession' => 'required',
             'education' => 'required',
             'monthly_income' => 'required|numeric',
@@ -141,6 +146,8 @@ class FrontendController extends Controller
             'credit_source' => 'nullable',
             'photo' => 'nullable|image',
             'nid_image' => 'nullable|image',
+            'signature_image' => 'nullable|image',
+            'address_certificate_image' => 'nullable|image',
             'password' => 'nullable|min:6',
             'savings_product_id' => 'nullable|exists:savings_products,id',
         ]);
@@ -148,19 +155,33 @@ class FrontendController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
+        $profilDir = public_path() . "/uploads/profile/";
         $photo = 'default.png';
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $photo = time() . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/profile/", $photo);
+            $file->move($profilDir, $photo);
         }
-
+    
         $nid_image = null;
         if ($request->hasFile('nid_image')) {
             $file = $request->file('nid_image');
             $nid_image = time() . $file->getClientOriginalName();
-            $file->move(public_path() . "/uploads/media/", $nid_image);
+            $file->move($profilDir, $nid_image);
+        }
+
+        $signature_image = null;
+        if ($request->hasFile('signature_image')) {
+            $file = $request->file('signature_image');
+            $signature_image = time() . $file->getClientOriginalName();
+            $file->move($profilDir, $signature_image);
+        }
+
+        $address_certificate_image = null;
+        if ($request->hasFile('address_certificate_image')) {
+            $file = $request->file('address_certificate_image');
+            $address_certificate_image = time() . $file->getClientOriginalName();
+            $file->move($profilDir, $address_certificate_image);
         }
 
         DB::beginTransaction();
@@ -176,6 +197,7 @@ class FrontendController extends Controller
         $member->birth_date = $request->input('birth_date');
         $member->religion = $request->input('religion');
         $member->marital_status = $request->input('marital_status');
+        $member->spouse_name = $request->input('spouse_name');
         $member->profession = $request->input('profession');
         $member->education = $request->input('education');
         $member->monthly_income = $request->input('monthly_income');
@@ -200,6 +222,8 @@ class FrontendController extends Controller
         $member->credit_source = $request->input('credit_source');
         $member->photo = $photo;
         $member->nid_image = $nid_image;
+        $member->signature_image = $signature_image;
+        $member->address_certificate_image = $address_certificate_image;
         $member->nid = $request->input('nid_number');
         $member->status = 0;
         $member->save();
@@ -235,6 +259,10 @@ class FrontendController extends Controller
 
         DB::commit();
 
-        return back()->with('success', _lang('Registration submitted successfully. We will contact you soon.'));
+        if (!$request->ajax()) {
+            return back()->with('success', _lang('Registration submitted successfully. We will contact you soon.'));
+        } else {
+            return response()->json(['result' => 'success', 'action' => 'store', 'message' => _lang('Registration submitted successfully. We will contact you soon.')]);
+        }
     }
 }

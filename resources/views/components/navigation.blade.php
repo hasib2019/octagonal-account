@@ -4,15 +4,16 @@
             <span style="
                 display: inline-block;
                 font-family: 'Poppins', Arial, sans-serif;
-                font-size: .9rem;
+                font-size: 13px;
                 font-weight: 700;
                 color: #b85c38;
-                letter-spacing: 1.5px;
+                letter-spacing: 1.2px;
                 text-shadow: 1px 2px 8px #fff8, 0 2px 8px #b85c3822;
-                padding: 0.2em 0.1em;
-                margin: 0.2em 0;
+                padding: 0.15em 0.1em;
+                margin: 0.15em 0;
+                line-height: 1.1;
             ">
-                <span style="vertical-align:middle; font-size: 1rem;">
+                <span style="vertical-align:middle; font-size: .95rem; line-height: 1.1;">
                     কোডার পেশাজীবী সমবায় সমিতি লিঃ
                 </span><br />
                 Coder Professional Cooperative Society Ltd.
@@ -23,13 +24,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto">
-                <a href="/" class="nav-item nav-link active">প্রচ্ছদ (Home)</a>
-                <a href="/members" class="nav-item nav-link active">সদস্য (Members)</a>
-                <a href="/docs" class="nav-item nav-link active">ডকুমেন্টস (Documents)</a>
-                <a href="/projects" class="nav-item nav-link active">প্রকল্পসমূহ (Projects)</a>
-                <a href="/executive" class="nav-item nav-link active">কমিটি (Committee)</a>
-                <a href="/registration" class="nav-item nav-link">নিবন্ধন (Registration)</a>
-                <a href="/login" class="nav-item nav-link">লগইন (Login)</a>
+                <a href="/" class="nav-item nav-link active">প্রচ্ছদ</a>
+                <a href="/members" class="nav-item nav-link active">সদস্য</a>
+                <a href="/docs" class="nav-item nav-link active">ডকুমেন্টস</a>
+                <a href="/projects" class="nav-item nav-link active">প্রকল্পসমূহ</a>
+                <a href="/executive" class="nav-item nav-link active">কমিটি</a>
+                <a href="/registration" class="nav-item nav-link">নিবন্ধন</a>
+                <a href="/login" class="nav-item nav-link">লগইন</a>
             </div>
         </div>
     </div>
