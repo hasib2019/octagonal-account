@@ -103,6 +103,14 @@ $pending_loans = request_count('pending_loans', true);
 </li>
 
 <li>
+	<a href="javascript: void(0);"><i class="fas fa-users-cog"></i><span>{{ _lang('Committee Setup') }}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+	<ul class="nav-second-level" aria-expanded="false">
+		<li class="nav-item"><a class="nav-link" href="{{ route('committees.index') }}">{{ _lang('Executive Committee') }}</a></li>
+		<li class="nav-item"><a class="nav-link" href="{{ route('designations.index') }}">{{ _lang('Designations') }}</a></li>
+	</ul>
+</li>
+
+<li>
 	<a href="{{ route('withdraw_methods.index') }}"><i class="fas fa-clipboard-list"></i><span>{{ _lang('Withdraw Methods') }}</span></a>
 </li>
 

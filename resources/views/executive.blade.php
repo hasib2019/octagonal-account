@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>{{ config('app.name') }} - Executive Committee</title>
@@ -42,80 +43,87 @@
 
     <div class="container-fluid pb-3 hero-header bg-light">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <div class="glass-card-header mb-3">
-                        <h5 class="text-center fw-bold" style="color:#045D5D; letter-spacing:1px; text-shadow:1px 2px 8px #fff8; font-size:1.5rem; font-family:'Poppins',sans-serif;">
-                            কার্যনির্বাহী কমিটি (Executive Committee)
-                        </h5>
-                    </div>
-                    
-                    @foreach($designations as $designation)
-                    <div class="row justify-content-center mb-5">
-                        <div class="col-12">
-                            <h4 class="text-center mb-4 fw-bold" style="color: #045D5D;">{{ $designation->name }}@if($designation->used_option) ({{ $designation->used_option }}) @endif</h4>
-                            
-                            <div class="row g-4 justify-content-center">
-                                @foreach($designation->committees as $cm)
-                                @php $member = $cm->member; @endphp
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card border-0 shadow-lg h-100">
-                                        <div class="card-body text-center p-4">
-                                            <div class="position-relative mb-4">
-                                                <div class="member-avatar mx-auto" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid #045D5D; background: linear-gradient(135deg, #045D5D, #067676);">
-                                                    <img src="{{ isset($member->photo) ? asset('uploads/profile/'.$member->photo) : asset('assets/img/team/default.jpg') }}" 
-                                                         class="w-100 h-100" 
-                                                         style="object-fit: cover;" 
-                                                         alt="{{ $member->first_name }} {{ $member->last_name }}"
-                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                                    <div class="d-none align-items-center justify-content-center w-100 h-100 text-white">
-                                                        <i class="fas fa-user fa-3x"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <h5 class="fw-bold text-dark mb-1">{{ $member->first_name }} {{ $member->last_name }}</h5>
-                                            <p class="text-muted small mb-2">{{ $member->first_name_bn }} {{ $member->last_name_bn }}</p>
-                                            <h6 class="text-primary mb-3">{{ $designation->name }}</h6>
-                                            
-                                            <div class="contact-info mb-3">
-                                                <p class="mb-1 small">
-                                                    <i class="fas fa-phone text-success me-2"></i>
-                                                    <a href="tel:{{ $member->mobile }}" class="text-decoration-none">{{ $member->mobile }}</a>
-                                                </p>
-                                                <p class="mb-0 small">
-                                                    <i class="fas fa-envelope text-primary me-2"></i>
-                                                    <a href="mailto:{{ $member->email }}" class="text-decoration-none">{{ $member->email }}</a>
-                                                </p>
-                                            </div>
-                                            
-                                            <div class="social-links">
-                                                @if(isset($member->facebook))
-                                                <a href="{{ $member->facebook }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
-                                                    <i class="fab fa-facebook-f"></i>
-                                                </a>
-                                                @endif
-                                                @if(isset($member->linkedin))
-                                                <a href="{{ $member->linkedin }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
-                                                    <i class="fab fa-linkedin-in"></i>
-                                                </a>
-                                                @endif
-                                                @if(isset($member->twitter))
-                                                <a href="{{ $member->twitter }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
-                                                    <i class="fab fa-twitter"></i>
-                                                </a>
-                                                @endif
+            <div class="glass-card-header mb-3">
+                <h5 class="text-center fw-bold"
+                    style="color:#045D5D; letter-spacing:1px; text-shadow:1px 2px 8px #fff8; font-size:1.5rem; font-family:'Poppins',sans-serif;">
+                    কার্যনির্বাহী কমিটি (Executive Committee)
+                </h5>
+            </div>
+            <div class="row mb-5">
+
+                @foreach ($designations as $designation)
+                    @foreach ($designation->committees as $cm)
+                        @php $member = $cm->member; @endphp
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card border-0 shadow-lg h-100">
+                                <div class="card-header text-center bg-light">
+                                    <strong>{{ $designation->name }}</strong>
+                                    @if ($designation->used_option)
+                                        <span class="text-muted">({{ $designation->used_option }})</span>
+                                    @endif
+                                </div>
+                                <div class="card-body text-center p-4">
+                                    <div class="position-relative mb-4">
+                                        <div class="member-avatar mx-auto"
+                                            style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid #045D5D; background: linear-gradient(135deg, #045D5D, #067676);">
+                                            <img src="{{ isset($member->photo) ? asset('uploads/profile/' . $member->photo) : asset('assets/img/team/default.jpg') }}"
+                                                class="w-100 h-100" style="object-fit: cover;"
+                                                alt="{{ $member->first_name }} {{ $member->last_name }}"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div
+                                                class="d-none align-items-center justify-content-center w-100 h-100 text-white">
+                                                <i class="fas fa-user fa-3x"></i>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <h5 class="fw-bold text-dark mb-1">{{ $member->first_name }}
+                                        {{ $member->last_name }}</h5>
+                                    <p class="text-muted small mb-2">{{ $member->first_name_bn }}
+                                        {{ $member->last_name_bn }}</p>
+                                    <h6 class="text-primary mb-3">{{ $designation->name }}</h6>
+
+                                    <div class="contact-info mb-3">
+                                        <p class="mb-1 small">
+                                            <i class="fas fa-phone text-success me-2"></i>
+                                            <a href="tel:{{ $member->mobile }}"
+                                                class="text-decoration-none">{{ $member->mobile }}</a>
+                                        </p>
+                                        <p class="mb-0 small">
+                                            <i class="fas fa-envelope text-primary me-2"></i>
+                                            <a href="mailto:{{ $member->email }}"
+                                                class="text-decoration-none">{{ $member->email }}</a>
+                                        </p>
+                                    </div>
+
+                                    <div class="social-links">
+                                        @if (isset($member->facebook))
+                                            <a href="{{ $member->facebook }}"
+                                                class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                        @endif
+                                        @if (isset($member->linkedin))
+                                            <a href="{{ $member->linkedin }}"
+                                                class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                <i class="fab fa-linkedin-in"></i>
+                                            </a>
+                                        @endif
+                                        @if (isset($member->twitter))
+                                            <a href="{{ $member->twitter }}"
+                                                class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
-                                @endforeach
                             </div>
                         </div>
-                    </div>
                     @endforeach
+                @endforeach
+            </div>
 
-                    <!-- Committee Information -->
+            <!-- Committee Information -->
                     <div class="row justify-content-center">
                         <div class="col-lg-10">
                             <div class="card border-0 shadow-sm">
@@ -124,36 +132,23 @@
                                     <div class="row g-4">
                                         <div class="col-md-6">
                                             <h6>কমিটি গঠনের তারিখ:</h6>
-                                            <p>১৫ জানুয়ারি ২০২৪</p>
-                                            
+                                            <p>{{ $committeeInfo['formation_date'] ? \Carbon\Carbon::parse($committeeInfo['formation_date'])->format('d F Y') : '-' }}</p>
+
                                             <h6>কার্যকাল:</h6>
-                                            <p>৩ (তিন) বছর</p>
+                                            <p>{{ $committeeInfo['tenure_years'] ? $committeeInfo['tenure_years'] . ' বছর' : '-' }}</p>
                                         </div>
                                         <div class="col-md-6">
                                             <h6>পরবর্তী নির্বাচন:</h6>
-                                            <p>১৪ জানুয়ারি ২০২৭</p>
-                                            
+                                            <p>{{ $committeeInfo['next_election_date'] ? \Carbon\Carbon::parse($committeeInfo['next_election_date'])->format('d F Y') : '-' }}</p>
+
                                             <h6>মোট সদস্য সংখ্যা:</h6>
-                                            <p>৮ (আট) জন</p>
+                                            <p>{{ $committeeInfo['total_members'] }} জন</p>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="mt-4">
-                                        <h6>যোগাযোগের ঠিকানা:</h6>
-                                        <address class="mb-0">
-                                            কোডার গ্রুপ সমিতি<br>
-                                            গ্রাম: বাঙ্গাইল, উপজেলা: সাভার<br>
-                                            জেলা: ঢাকা, বাংলাদেশ<br>
-                                            <strong>ফোন:</strong> +৮৮০ ১৭১২৩৪৫৬৭৮<br>
-                                            <strong>ইমেইল:</strong> info@codergroup.org
-                                        </address>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </div>
     </div>
 

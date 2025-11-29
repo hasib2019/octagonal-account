@@ -376,3 +376,4 @@ Route::get('migration/update', 'Install\UpdateController@update_migration');
             // Executive Committee Management
             Route::resource('designations', DesignationController::class)->middleware("demo:PUT|PATCH|DELETE");
             Route::resource('committees', CommitteeController::class)->only(['index','create','store','destroy'])->middleware("demo:PUT|PATCH|DELETE");
+            Route::post('committees/info', [CommitteeController::class, 'infoUpdate'])->name('committees.info.update');

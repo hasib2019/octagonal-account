@@ -14,9 +14,9 @@
                 line-height: 1.1;
             ">
                 <span style="vertical-align:middle; font-size: .95rem; line-height: 1.1;">
-                    কোডার পেশাজীবী সমবায় সমিতি লিঃ
+                    অক্টাগোনাল সমবায় সমিতি লিঃ
                 </span><br />
-                Coder Professional Cooperative Society Ltd.
+                Octagonal Cooperative Society Ltd.
             </span>
         </a>
         <button type="button" class="navbar-toggler ms-auto" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">

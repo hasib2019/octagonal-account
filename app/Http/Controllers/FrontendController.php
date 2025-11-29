@@ -30,7 +30,13 @@ class FrontendController extends Controller
             ->where('status', 1)
             ->orderBy('name')
             ->get();
-        return view('executive', compact('designations'));
+        $committeeInfo = [
+            'formation_date' => get_option('committee_formation_date'),
+            'tenure_years' => get_option('committee_tenure_years'),
+            'next_election_date' => get_option('committee_next_election_date'),
+            'total_members' => \App\Models\Committee::count(),
+        ];
+        return view('executive', compact('designations', 'committeeInfo'));
     }
 
     public function openAccount(Request $request)
