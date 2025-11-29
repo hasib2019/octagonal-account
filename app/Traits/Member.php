@@ -8,7 +8,7 @@ trait Member {
 
     public static function bootMember() {
         static::addGlobalScope('member_id', function (Builder $builder) {
-            if (auth()->user()->user_type == 'user') {
+            if (auth()->check() && auth()->user()->user_type == 'user') {
                 return $builder->whereHas('member', function (Builder $query) {
                     $query->where('branch_id', auth()->user()->branch_id);
                 });
